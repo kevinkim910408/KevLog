@@ -7,10 +7,50 @@ interface Project {
 
 const projectsData: Project[] = [
   {
-    title: 'The Time Machine',
-    description: `Imagine being able to travel back in time or to the future. Simple turn the knob
-    to the desired date and press "Go". No more worrying about lost keys or
-    forgotten headphones with this simple yet affordable solution.`,
+    title: 'NYX Console',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'QC Submission Project',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'Vape Cycle',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'Board room web/app',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'Nicotine Pouches',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'NYX Hydrogen',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'Valor Console',
+    description: ``,
+    imgSrc: '/static/images/time-machine.jpg',
+    href: '/blog/projects/the-time-machine',
+  },
+  {
+    title: 'Rights 4 Vapers',
+    description: ``,
     imgSrc: '/static/images/time-machine.jpg',
     href: '/blog/projects/the-time-machine',
   },

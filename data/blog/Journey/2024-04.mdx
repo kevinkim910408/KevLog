@@ -1,0 +1,216 @@
+---
+title: '2024 - 4월 회고록'
+date: '2024-05-08'
+tags: ['회고']
+draft: false
+summary: 2024년 4월의 회고록 입니다.
+---
+
+# 2024년 4월의 회고록
+
+4월은 생각보다 빠르게 지나가지 않았던거 같다.
+
+개발자로서 특별한 키워드는 없고 _연봉_, _학업_ 그리고 _개발_ 이렇게 될거 같다.
+
+---
+
+### 연봉
+
+올랐다. 정확히 4% 정도가 올랐다. 그리고 보너스를 2% 정도 받았다.
+
+입사 후 세 번째로 연봉이 오른 순간이다.
+
+연봉이 올라갈수록 오름폭이 낮아지는 것은 예상했던 순간이었지만, 4%를 듣는 순간 아쉬움이 더 짙어진 협상이 된 것 같다.
+
+<div className="my-1 w-full overflow-hidden px-2 xl:my-1 xl:w-1/2 xl:px-2">
+  ![Github
+  Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2Fsalary.jpg?alt=media&token=87537d5a-d4e6-4c3c-8d34-d45384de3cde)
+</div>
+
+---
+
+### 학업
+
+새로운 꿈에 도전할 예정이다.
+
+미국 조지아 대학교에서 진행하는 온라인 대학원 수업에 지원할 예정이다.
+
+내 예상대로 흘러가면 예상 입학일은 내년 2025년 1월일 것으로 예상된다.
+
+그 때까지 준비할 것도, 공부할 것도 많다.
+
+추천서 3통을 받아야 하는 것이 조금 번거로울 것으로 보인다...
+
+<div className="my-1 w-full overflow-hidden px-2 xl:my-1 xl:w-1/2 xl:px-2">
+  ![Github
+  Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2Fstudy.png?alt=media&token=14fa6f87-3ed9-48a0-9348-79e3493f1fa2)
+</div>
+
+---
+
+### 개발
+
+이번 달은 R4V 프로젝트의 리드를 맡아 진행하게 되었다.
+
+주말이나 퇴근 후에도 가끔씩 집에서 프로젝트 매니저의 콜을 받아 개발을 진행하다가 무사히 완료했다.
+
+3월 21일에 개발을 시작하였고, 4월 19일에 모든 버그 수정과 추가 수정을 마무리하였다.
+
+작년에 진행한 QC 프로젝트와 전체적인 플로우는 유사했다.
+
+작년에는 React (vite.js)와 Node Express를 사용하여 모노레포를 만들었지만, 올해는 Next.js 14의 App routing을 사용하여 진행하였다.
+
+이 프로젝트는 내 성장에 큰 도움이 된거 같다.
+
+Next.js와 친숙해지면서 이 프레임워크가 추후 메인 개발 프레임워크가 될 수도 있다는 생각이 들었다.
+
+개발된 프로젝트:
+
+1. R4V https://www.rights4vapers.com/
+2. CB GG https://cb-gg.vercel.app/
+3. MHW cheat sheet https://mhw-cheat-sheet.vercel.app/
+
+---
+
+##### - JSONP
+
+상황:
+
+- 우편번호를 `https://represent.opennorth.ca/` 여기 API로 보내서, 해당 지역의 MP가 누군지를 찾는게 목표다.
+- `Represent is free up to 60 requests per minute` 라는 Limit이 걸려있다.
+- 하지만 이용자는 1분에 100명이 될 수도, 200명이 될 수 도 있다. 이러면 우리 서비스는 멈추게 되서 손해가 일어난다.
+
+그래서 찾은 방법인 JSONP, 즉 Client side에 api를 추가하여, Client가 api를 부르게 하는 방법이다.
+
+```js
+const onValidatePostalcodeHandler = () => {
+  const script = document.createElement('script')
+  script.src = `https://represent.opennorth.ca/postcodes/${form.postalCode.replaceAll(' ', '').toUpperCase()}/?callback=handleCallBack`
+  script.id = SCRIPT_ID
+  script.onerror = removeScript
+  document.body.appendChild(script)
+  setScriptAdded(true)
+}
+
+const removeScript = () => {
+  const script = document.getElementById(SCRIPT_ID)
+  if (script) {
+    document.body.removeChild(script)
+  }
+}
+```
+
+이런식으로 우편번호를 validation 할때, 해당 script를 DOM에 추가하고, 사용 후 script를 지우는 쪽으로 진행 하였다.
+
+물론 직접적으로 지워주지 않아도, 새로고침 할 시 삭제되는 것도 확인 하였다.
+
+하지만 JSONP는 이미 사용이 많지 않은 기술이고, 그 이유는 아마 React가 보편화 되면서가 아닐까 생각한다.
+
+React는 가상DOM을 사용하는데, DOM에 직접 접근을 해야하는 이 기술은 아마 React가 추구하는 방향과 달랐던거 같다.
+
+하지만 코드에 정해진 답은 없고, 문제가 해결되었으면 그건 그대로 끝난거다.
+
+---
+
+##### - 맵 차트
+
+상황:
+
+- 캐나다에 있는 각각 Provinces에서 얼마나 많은 사람들이 submit을 했는지 차트화를 해야한다.
+- 각 수치별로 다른 색상을 표시해야한다.
+
+<div className="my-1 w-full overflow-hidden px-2 xl:my-1 xl:w-1/2 xl:px-2">
+  ![Github
+  Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2FSVG.jpg?alt=media&token=0d074846-a9a0-4c93-8890-ffcec2ff12c4)
+</div>
+
+처음해보는 작업이라 어렵겠구나 싶었지만, 캐나다 전체 맵 svg가 아닌, province별 조각조각의 svg를 구해서, 그냥 className에 내가 보내주고 싶은 색상을 보내주기만 하면 되는거였다.
+
+```js
+<svg
+  className="svg-container"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`${isMobile ? '0 0 450 500' : '0 0 600 500'}`}
+>
+  {sortedMapJson.map((data, i) => {
+    return (
+      <path
+        key={data.id + i}
+        id={data.id}
+        name={data.name}
+        d={data.d}
+        className={chartDiff(mapData[i]?.count)}
+      />
+    )
+  })}
+</svg>
+```
+
+![Github Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2Fcanadamap.png?alt=media&token=fcc4981b-ca81-4cbc-8605-14a658aaafe6)
+
+그 외에도 PDF, Print, Excel 이런 것 들을 주로 다루면서 리캡을 오랜만에 한 번 했다.
+
+---
+
+##### Vision cloud OCR
+
+구글에서 제공하는 OCR API를 사용 해 봤다.
+
+사진은 `컨커러스블레이드` 라는 게임의 결과창인데, 해당 게임은 OPGG 같은 정리 사이트가 없어서 내가 만들었다.
+
+아직은 대부분 수작업이긴 한데, 결과창 스크린샷을 사이트에 업로드하면, OCR API를 사용해서 text data 만 다 빼와서 Json으로 만든다.
+
+Json으로 만들어진 데이터를 이제 어떤 페이지의 input들에 뿌려주면 그만이다.
+
+아직 분석 정확도는 80%~90% 정도 인거 같다.
+
+스크린샷 한장에 30명의 데이터가 있는데, 보통 3명정도는 누락되는거 같다.
+
+해당 프로젝트는 내가 진행하던 프로젝트들 중에 처음으로 Tailwind를 적용해서 진행해서 의미가 더 크다.
+
+<div className="my-1 w-full overflow-hidden px-2 xl:my-1 xl:w-1/2 xl:px-2">
+  ![Github
+  Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2Focr.jpg?alt=media&token=f987250a-9853-456b-ae48-eb7d14ae3d5c)
+</div>
+
+---
+
+### 아쉬운 점
+
+R4V에 아쉬운 점이 있다.
+
+Radix UI를 사용하면서 Headless UI를 처음으로 사용하는 경험을 해보는거 까진 좋았는데,
+
+Shadcn UI를 너무 늦게 발견하고, Tailwind 대신 Emotion을 사용한 것 이다.
+
+내 개인적인 생각으로는 요즘 추세는 Next.js 혹은 Remix.js를 사용하면서 Tailwind로 스타일링을 하는게 아닐까 했는데,
+
+이번에도 Styled-components와 비슷한 Emotion.js를 사용하여 스타일링을 한게 아쉽다.
+
+또 다른 아쉬운점은, 리팩토링을 할 시간 조차 없던 긴급한 프로젝트여서, 코드가 너무 날림인게 아쉽다.
+
+다행인점은, CB_GG는 내가 지금까지 만든 프로젝트들 중에 역대급이라 할 정도로 신경을 쓰고 최신 기술 스택들을 사용하였다.
+
+그래서 더 애정이 가는 프로젝트다.
+
+그리고 지금 회사에는 나를 제대로 이끌어줄 사수는 Gabriel 하고 Leo밖에 없는 것 도 아쉽다.
+
+나도 배울게 많은데, 내가 이끌어야 할 사람도 두명이다.
+
+### 5월 계획
+
+5월에 꼭 이루고 싶은 계획이 있다.
+
+1. 미적분 공부
+
+2. 알고리즘 공부
+
+3. CB_GG
+
+- 두 유저끼리 스탯을 비교하는 페이지를 추가하고 싶다.
+- 이미지를 지금은 한장씩 업로드 하는데, Bulk image upload를 한번 적용해서 OCR로 분석해보고싶다. (실패 가능성이 매우 크다)
+
+\*\*\* R4V로 제출받은 폼이 3만장을 돌파했다. 매니지먼트가 기대하던 양의 아직 절반정도다.
+
+![Github Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/journey%2Fsubmission.png?alt=media&token=1841d53f-a57c-4c65-b575-ba06ea32b8e6)
