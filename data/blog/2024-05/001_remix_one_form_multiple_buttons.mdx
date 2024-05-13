@@ -1,0 +1,52 @@
+---
+title: 'Remix.js - Form에서 여러개 submit 버튼 사용'
+date: '2024-05-09'
+tags: ['Remix.js']
+draft: false
+---
+
+### 상황
+
+Remix.js는 React.js와 상당히 비슷하면서도, 상당히 다른 프레임 워크이다.
+
+특히 Loader와 Action 같은 기능들은 편리하면서도 데이터를 다시 받아와서 화면에 그릴때 불편함이 아직 있는거 같다.
+
+이번에 마주한 불편함은 하나의 Form 안에서 여러개의 Submit 버튼을 이용해야 하는 상황이다.
+
+![Github Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fremix_one_form_multiple_buttons.png?alt=media&token=41171ec1-1a21-4b2d-844a-74d8d71f018f)
+
+_사진속 이 Modal 이 하나의 Form인데, 이 Form안에 Delete이랑 Update 두개를 submit 해야한다_
+
+보통 이럴경우, 일반 React.js의 경우 그냥 다른 버튼을 onClick으로 API call을 해도 되고, 아니면 아예 Form을 사용하지 않고 진행할 수 도 있다.
+
+하지만 Remix.js는 Form에서 submit 해줘야지 Action 에서 데이터를 받아서 API call을 할 수 있다.
+
+### 해결방법
+
+생각보다 간단하게 button의 속성인 name과 value만 이용해서 해결 할 수 있다.
+
+일반 React.js에서도 작동한다.
+
+아래처럼 name 을 같은 이름으로 정의하고 value에 이 버튼이 delete인지 edit인지 넣어준다.
+
+```js
+<Form>
+  <Button type="submit" aria-label="delete" name="_action" value="delete">
+    Delete
+  </Button>
+  <Button type="submit" aria-label="edit" name="_action" value="edit">
+    Edit
+  </Button>
+</Form>
+```
+
+그리고 Action 함수에서는 아래처럼 불러주면 이제 이 버튼을 눌렀을 때, 취해야 할 행동을 구분 지을 수 있다.
+
+```js
+const { _action } = Object.fromEntries(formData)
+const isDelete = _action === 'delete' // !isDelete = edit
+```
+
+name과 value는 input 계열의 태그들에만 줄 수 있는지 알았지만, 이렇게 버튼에도 주어서 구분 지을 수 있다는 방법을 알게 된 작업이 었다.
+
+참고자료: https://www.youtube.com/watch?v=w2i-9cYxSdc
