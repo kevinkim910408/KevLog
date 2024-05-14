@@ -27,8 +27,8 @@ const projectsData: Project[] = [
   {
     title: 'Board room web/app',
     description: ``,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/projects/the-time-machine',
+    imgSrc: '/static/thumbnails/logo_BOARD_APP.png',
+    href: '/blog/projects/002_board_app',
   },
   {
     title: 'Nicotine Pouches',

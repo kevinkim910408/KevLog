@@ -1,0 +1,55 @@
+---
+title: '미팅 스케줄 웹앱'
+date: '2023-12-29'
+tags: ['Project']
+draft: false
+thumbnail: '/static/thumbnails/logo_BOARD_APP.png'
+summary: 회사 내의 미팅 예약과 수정, 취소를 관리해주는 웹앱.
+---
+
+### 제작기간
+
+2023-12-18 ~ 2023-12-29
+
+### 테크 스택
+
+Next.js(v14), NextAuth, Typescript, Recoil, MongoDB, emotion, Radix UI, PWA
+
+### 주요 기능
+
+Auth - Google 로그인 (특정 이메일 domain만 로그인 가능)
+
+Reservation - 예약 CRUD, Progress bar, 주간 반복 예약
+
+### 내가 맡은 부분
+
+프론트엔드 100%, 백엔드 0%
+
+### 추가 개발 계획
+
+CEO가 Biweekly하고, 이메일 알림 혹은 문자 알림을 넣기를 원하지만, 일단 보류 되었기 때문에 이 외엔 없다고 생각한다.
+
+### 느낀점
+
+첫 Next.js 프로젝트이자, 처음으로 제대로 된 서버를 굴리지 않고 진행 한 프로젝트이다.
+
+일단 규모가 굉장히 작지만, 회사 내의 CEO등 Management 팀이 사용할 앱이다 보니, 에러가 안나게 신중하게 진행되었다.
+
+일단 주된 업무는 프론트 엔드였다, 현재 시간에 맞춰서 이동하는 timeline bar, 그리고 미팅시간이 되면 progrss bar도 움직여야하고,
+
+예약이 되면 날짜와 시간에 맞춰서 grid 형식으로 채워 넣어야한다.
+
+힘들었던 부분은 프론트엔드 부분에서는 크게 없던거 같다. 백엔드는 중복처리가 힘들었다고 했다.
+
+프론트엔드는 Radix UI를 사용하면서 굉장히 UI 들을 쉽게 뽑아냈고, 대부분 스케쥴 만드는 로직은 구글에서 쉽게 접할 수 있어서 비교적 어렵지 않았다.
+
+이런 Headless UI를 사용해 본게 처음이라 그런지, 굉장히 좋았던 점으로 기억된다.
+
+다만 Radix UI 와 emotion.js를 사용했는데, 다음에는 Shadcn UI와 Tailwind css를 사용해서 진행해 보면 어떨까 생각했다.
+
+emotion.js나 styled-components, 아니면 보통 css는 너무 코드 line이 많아지는 경향이 있었고, 파일을 분리하자니, 이번엔 파일 수가 많아지는 Issue가 있었다.
+
+다음에는 Tailwind 를 사용해서 이런 상황을 해결한 다음 비교해 보는건 어떨까 싶다.
+
+![FB Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/project%2Fboard_app_1.png?alt=media&token=762ba3e5-35a8-4167-883c-9cec1067f065)
+![FB Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/project%2Fboard_app_2.png?alt=media&token=6a3b63b0-d9bc-42d3-b714-c3f01a15b969)
