@@ -51,8 +51,8 @@ const projectsData: Project[] = [
   {
     title: 'Rights 4 Vapers',
     description: ``,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/projects/the-time-machine',
+    imgSrc: '/static/thumbnails/logo_R4V.png',
+    href: '/blog/projects/003_r4v',
   },
 ]
 
