@@ -52,3 +52,54 @@ const isDelete = _action === 'delete' // !isDelete = edit
 name과 value는 input 계열의 태그들에만 줄 수 있는지 알았지만, 이렇게 버튼에도 주어서 구분 지을 수 있다는 방법을 알게 된 작업이 었다.
 
 참고자료: https://www.youtube.com/watch?v=w2i-9cYxSdc
+
+### 실제 코드
+
+- 버튼의 value들을 const로 선언한다.
+
+```js
+export const companyCreateActionIntent = 'create-company'
+export const companyUpdateActionIntent = 'update-company'
+export const companyDeleteActionIntent = 'delete-company'
+```
+
+- 버튼 예시
+
+```js
+<StatusButton
+  type="submit"
+  aria-label="delete"
+  name="intent"
+  value={companyDeleteActionIntent}
+  disabled={isPending}
+  status={isPending ? 'pending' : form.status ?? 'idle'}
+  className="bg-[#EF3F44]"
+>
+  Delete Company
+</StatusButton>
+```
+
+- Action 함수 예시
+
+```js
+export async function action({ request, params }: ActionFunctionArgs) {
+	const formData = await request.formData()
+	checkHoneypot(formData)
+
+	const intent = formData.get('intent')
+	const { companyId } = params
+
+switch (intent) {
+		case companyCreateActionIntent:
+			return handleCompanyCreate(request, formData)
+		case companyUpdateActionIntent:
+			return handleCompanyUpdate(request, formData, companyId)
+		case companyDeleteActionIntent:
+			return handleCompanyDelete(request, companyId)
+		default:
+			throw new Response(`Invalid intent "${intent}"`, { status: 400 })
+	}
+}
+
+// handle create, update, delete 함수...
+```
