@@ -9,8 +9,8 @@ const projectsData: Project[] = [
   {
     title: 'NYX Console',
     description: ``,
-    imgSrc: '/static/images/time-machine.jpg',
-    href: '/blog/projects/the-time-machine',
+    imgSrc: '/static/thumbnails/logo_NYX.png',
+    href: '/blog/projects/001_nyx_console',
   },
   {
     title: 'QC Submission Project',
