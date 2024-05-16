@@ -1,0 +1,64 @@
+---
+title: 'CS - 브라우저 렌더링 순서 / 서비스워커 LifeCycle'
+date: '2024-05-16'
+tags: ['CS']
+draft: false
+thumbnail: '/static/thumbnails/logo_CS.png'
+summary: 이거 알면 인터뷰 떄도 좋고, 개발할떄도 유용함.
+---
+
+![Github Traffic](https://user-images.githubusercontent.com/59503331/185799625-606d2027-7685-4a8e-b3fa-95cbdac2c355.png)
+
+사진과는 조금 다르지만, 가장 처음에는 Loading이 있다 (첫번째 시작 단계)
+
+`1. Loading - 우리가 뭘 그릴지 브라우저가 리소스를 읽는중`
+
+대충 브라우저가 HTML 하고 CSS, JS 등을 읽는 시간을 Loading이라고 하면 될거 같다.
+
+그 다음에는 Parsing이 일어난다.
+
+이 과정은 사진에 있는 두번쨰 단계이다.
+
+`2. Parsing: HTML/XML Parser가 DOM Tree 만들고, CSS Parser가 CSSOM Tree 생성`
+
+조금 더 설명하자면,
+
+DOM Tree 는 그냥 `모든 html 태그` 를 말하고, CSSOM Tree 는 `모든 css 속성`들을 말한다
+
+여기서 파싱을 하던 도중, 만약에 브라우저가 JS파일을 만나면 Parsing을 멈추가 JS파일을 읽기 시작한다.
+
+사진속에는 없지만, 이 부분을 그냥 Processing JS files 이라 하면 될거같다.
+
+`3. Processing JS files - JS 파일을 읽는다 (Parsing이 중단되기때문에, 렌더링이 멈춘다. 이게 HTML과 CSS가 멈춘거고 JS를 Parsing한다고 생각해도 될거같다.)`
+
+JS 파일을 파싱하는 동안 navigator.serviceWorker.register를 만나면, 서비스워커가 Registering Status에 들어간다.
+
+여기서의 서비스워커 Status는 Registering Status이다.
+
+`4. Service Worker (Registering Status) - 서비스워커를 브라우저에 등록한다. `
+
+JS 파일 파싱이 모두 끝나면 서비스워커는 Installing Status 가 된다.
+
+`5. Service Worker (Installing Status) - 서비스워커 파일을 캐싱하고 필요한 리소스를 사전에 다운로드(오프라인을 위해)`
+
+그리고 설치가 완료되면 서비스워커는 Activating Status가 된다.
+
+`6. Service Worker (Activating Status) - 이전 버전의 서비스워커와의 충돌을 방지하고 필요한 초기화 작업을 수행`
+
+여기서 서비스워커 내부에 `event.waitUntil()` 를 사용하면 브라우저가 서비스워커 작업이 완료될 때까지 렌더링을 막아준다.
+
+이렇게 서비스워커의 등록과 설치가 모두 종료되었다.
+
+그 다음에는 평범한 브라우저 렌더링이 지속된다.
+
+`7. Rendering Tree - DOM Tree + CSSOM Tree를 합쳐서 하나의 Render Tree 생성`
+
+`8. CSS, Layout - Rendering Tree를 기준으로 그려야 할 노드와 스타일 크기 등을 계산.`
+
+`9. Drawing - Rendering Tree의 각 노드들을 실제 픽셀로 변환하여 브라우저에 그린다.`
+
+이제 모든 작업이 끝나면 서비스 워커가 Activated Status가 된다.
+
+`10. Service Worker (Activated Status) - 웹/앱과 독립적으로 백그라운드에서 동작, 네트워크 요청을 가로채서 캐싱,동기화 등의 기능 수행. 오프라인상태의 브라우저에게 캐싱콘텐츠 제공`
+
+마지막으로 등록 혹은 설치에 실패한 서비스워커는 `Redundant Status`에 들어가고, 이 서비스워커는 더 이상 영향력이 없다.
