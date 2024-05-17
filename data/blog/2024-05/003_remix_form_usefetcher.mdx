@@ -1,0 +1,185 @@
+---
+title: 'Remix.js - Form vs useFetcher'
+date: '2024-05-17'
+tags: ['Remix.js']
+draft: false
+thumbnail: '/static/thumbnails/logo_REMIX.png'
+summary: Form 과 useFetcher의 차이.
+---
+
+이것저것 검색을 하다가 Remix.js의 Form vs useFetcher이라는 공식문서를 읽게 되었다.
+
+공식문서: https://remix.run/docs/en/main/discussion/form-vs-fetcher
+
+![Firebase Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fremix_form_useFetcher.png?alt=media&token=3f74433e-d164-4a91-a0e5-30ae81532323)
+(출처: https://www.youtube.com/watch?v=1bsNKdMiph0)
+
+공식문서를 읽어봤고, 다른 영상이나 글도 읽어봤는데, 핵심내용을 뽑아보자면,
+
+Form 태그는 주로 url이 변경될 때 사용해야하고, useFethcer는 url이 변하지 않을때 사용한다.
+
+더 간단히 말하자면,
+
+하나의 행동이 끝나고, redirection이 필요하면 Form을 쓰고, 필요없으면 useFetcher를 쓰면 된다.
+
+아주 많은 복잡한 설명이 있었지만, 결국은 이게 거진 전부라 생각된다.
+
+### Form
+
+내가 어떤 페이지에서 회원정보를 등록하는 Form을 만들었다.
+
+등록 후, redirect를 할 경우는 아래와 같다.
+
+```js
+export async function action({ request, params }: ActionFunctionArgs) {
+	const formData = await request.formData()
+  // formData 처리...
+
+   if (errors) {
+    return json({ errors });
+  }
+
+  return redirect("/home");
+}
+
+export function Register() {
+  const { errors } = useActionData<typeof action>();
+  return (
+      <Form method="POST">
+        // inputs...
+        <Button type="submit">등록</Button>
+        {errors ? <span>{errors}</span> : null}
+      </Form>
+  )
+}
+```
+
+혹은 무언가를 삭제해서 redirect 할때도 이 Form 을 사용해서 action을 부르고, 해당 action내에서 database logic을 실행해 주면 된다. (아니면 .server.ts 파일을 만든다.)
+
+Form 은 보통 이렇게 사용한다고 생각된다.
+
+### useFetcher
+
+위에서도 말했지만, redirection이 필요없을때 사용하면 좋다.
+
+예를들면, 어떤 버튼을 눌렀을때 같은 페이지에 리스트를 나오게 한다던지, 장바구니 페이지에서 아이템 삭제를 눌렀을떄 라던지,
+
+이렇게 페이지 전환이 필요없을때 사용한다.
+
+```js
+export async function action({ request, params }: ActionFunctionArgs) {
+	const formData = await request.formData()
+  // formData 처리...
+
+  return  json({ data });
+}
+
+export type ProductFetch = typeof action
+
+export function Product() {
+  const fetcher = useFetcher<ProductFetch>({
+		key: 'ProductFetch',
+	})
+  return (
+    <>
+      <fetcher.Form method="POST">
+        // inputs...
+        <Button type="submit">데이터 가져오기</Button>
+      </fetcher.Form>
+      {fetcher.data.map(()=>(
+        <>
+          // 가져온 데이터 보여주기..
+        </>
+      ))}
+    </>
+  )
+}
+```
+
+### 상황
+
+위의 내용까지는 그냥 간단하다고 생각하는데, 내가 마주한 상황은 조금 달랐다.
+
+![Firebase Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fremix_form_usefetcher_2.png?alt=media&token=3cffeb2f-b69f-4e0d-b2ee-e7e5f2997776)
+
+위 사진처럼 하나의 큰 Form안에서 등록전에 list를 update해서 미리 한번 보고 등록을 해야하는 경우다.
+
+제일 밖의 Form은 등록 후, redirection이 필요해서 Form태그를 사용하고, 내부는 업데이트만 해야하기 때문에 useFetcher를 사용하면 쉽게 넘길 수 있겠지 생각했지만,
+
+일단 Form 안에 Form 을 또 사용하게 되는 경우이고,
+
+무엇보다 각각의 Form은 다른 action 함수를 가지고 있는데,
+
+등록 버튼이랑 연결된 action에서 `const formData = await request.formData()` 이렇게 formData처리를 할 경우,
+
+업데이트 버튼이랑 연결된 action에서는 위 처럼 formData를 처리할 수 없었다.
+
+아래와 같은 에러가 나타난다.
+
+```js
+TypeError: Could not parse content as FormData.
+```
+
+즉, formData를 안쓰고, 또 Form 태그안에 Form태그를 안쓰면서 데이터를 두번째 action에 무사히 전달해야한다.
+
+상황은 복잡해 보이지만, 해결법은 생각보다 쉬웠다.
+
+useFetcher는 생각보다 편리한 기능들을 제공하고 있었다.
+
+![Firebase Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fremix_form_usefetcher_3.png?alt=media&token=47bd1fe1-ac0b-4bbd-a701-f5f69e6c509a)
+(출처:https://remix.run/docs/en/main/hooks/use-fetcher#methods)
+
+사진엔 없지만, 링크에는 있는 fetcher.submit과 버튼의 onclick으로 해결하였다.
+
+일단 버튼 type을 submit으로하면, preventDefault()를 해서 모달이 닫히는걸 막아야하길래 그냥 button type을 button으로 주었고, onClick으로 해당 함수를 실행시켰다.
+
+#### 실제코드
+
+```js
+
+const handleFetcherSubmitProduct = () => {
+  fetcher.submit(
+    {
+      matchType: fields.matchType.value ?? 'ALL',
+      conditions: fields.conditions.value,
+      pageSize: items.length.toString(),
+    } as SubmitTarget,
+    {
+      action: `/resources/products?status=ACTIVE`,
+      method: 'POST',
+      encType: 'application/json',
+    },
+  )
+}
+
+const handleLoadMore = () => {
+  handleFetcherSubmitProduct()
+}
+
+  //... 기타 코드들..
+
+<Button variant="ghost" className="text-blue-300" onClick={handleLoadMore} type="button">
+  Show more products
+</Button>
+```
+
+그리고 받는 action에서는 formData를 받지 못하기 때문에 아래처럼 받았다.
+
+```js
+export async function action({ request }: ActionFunctionArgs) {
+	const { matchType, conditions, pageSize } = ProductConditionSchema.parse(
+		await request.json(),
+	)
+
+	return json(
+		await searchDiscountProducts({
+			matchType,
+			conditions,
+			page: 0,
+			pageSize: Number(pageSize) + 10,
+		}),
+	)
+}
+```
+
+결과적으로는 이렇게 해서 Form 태그 안에 또 다른 Form을 만드는 방법도 피하고, 각자 버튼들의 원래 목적도 달성하게 되었다.
