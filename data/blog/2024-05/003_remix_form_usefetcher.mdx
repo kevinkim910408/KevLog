@@ -24,6 +24,8 @@ Form 태그는 주로 url이 변경될 때 사용해야하고, useFethcer는 url
 
 아주 많은 복잡한 설명이 있었지만, 결국은 이게 거진 전부라 생각된다.
 
+---
+
 ### Form
 
 내가 어떤 페이지에서 회원정보를 등록하는 Form을 만들었다.
@@ -57,6 +59,8 @@ export function Register() {
 혹은 무언가를 삭제해서 redirect 할때도 이 Form 을 사용해서 action을 부르고, 해당 action내에서 database logic을 실행해 주면 된다. (아니면 .server.ts 파일을 만든다.)
 
 Form 은 보통 이렇게 사용한다고 생각된다.
+
+---
 
 ### useFetcher
 
@@ -96,6 +100,8 @@ export function Product() {
 }
 ```
 
+---
+
 ### 상황
 
 위의 내용까지는 그냥 간단하다고 생각하는데, 내가 마주한 상황은 조금 달랐다.
@@ -132,6 +138,8 @@ useFetcher는 생각보다 편리한 기능들을 제공하고 있었다.
 사진엔 없지만, 링크에는 있는 fetcher.submit과 버튼의 onclick으로 해결하였다.
 
 일단 버튼 type을 submit으로하면, preventDefault()를 해서 모달이 닫히는걸 막아야하길래 그냥 button type을 button으로 주었고, onClick으로 해당 함수를 실행시켰다.
+
+---
 
 #### 실제코드
 
@@ -183,3 +191,9 @@ export async function action({ request }: ActionFunctionArgs) {
 ```
 
 결과적으로는 이렇게 해서 Form 태그 안에 또 다른 Form을 만드는 방법도 피하고, 각자 버튼들의 원래 목적도 달성하게 되었다.
+
+---
+
+### 레퍼런스
+
+1. https://remix.run/docs/en/main/discussion/form-vs-fetcher

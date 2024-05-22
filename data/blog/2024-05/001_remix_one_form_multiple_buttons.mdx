@@ -4,7 +4,7 @@ date: '2024-05-09'
 tags: ['Remix.js']
 draft: false
 thumbnail: '/static/thumbnails/logo_REMIX.png'
-summary: 해결법 요약 - Button 의 속성인 name과 value 사용.
+summary: Button 의 속성인 name과 value 사용.
 ---
 
 ### 상황
@@ -22,6 +22,8 @@ _사진속 이 Modal 이 하나의 Form인데, 이 Form안에 Delete이랑 Updat
 보통 이럴경우, 일반 React.js의 경우 그냥 다른 버튼을 onClick으로 API call을 해도 되고, 아니면 아예 Form을 사용하지 않고 진행할 수 도 있다.
 
 하지만 Remix.js는 Form에서 submit 해줘야지 Action 에서 데이터를 받아서 API call을 할 수 있다.
+
+---
 
 ### 해결방법
 
@@ -51,7 +53,7 @@ const isDelete = _action === 'delete' // !isDelete = edit
 
 name과 value는 input 계열의 태그들에만 줄 수 있는지 알았지만, 이렇게 버튼에도 주어서 구분 지을 수 있다는 방법을 알게 된 작업이 었다.
 
-참고자료: https://www.youtube.com/watch?v=w2i-9cYxSdc
+---
 
 ### 실제 코드
 
@@ -103,3 +105,9 @@ switch (intent) {
 
 // handle create, update, delete 함수...
 ```
+
+---
+
+### 레퍼런스
+
+1. https://www.youtube.com/watch?v=w2i-9cYxSdc

@@ -1,0 +1,77 @@
+---
+title: 'CS - 웹 번들링'
+date: '2024-05-22'
+tags: ['CS']
+draft: false
+thumbnail: '/static/thumbnails/logo_CS.png'
+summary: HTML,CSS,JS를 하나로 합치는 작업.
+---
+
+![Firebase Traffic](https://prisync.com/wp-content/uploads/2018/04/product-bundling.jpg)
+(출처: https://prisync.com/blog/product-bundling/)
+
+웹 개발을 하다 보면 "웹팩", "번들링" 같은 단어들을 쉽게 접할 수 있다. 오늘은 번들링에 대해 알아보자.
+
+---
+
+### 번들링이란?
+
+개발 과정에서 우리는 보통 아주 많은 스크립트를 사용한다. 리액트를 예로 들어보면,
+
+![Firebase Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fcs_bundling.png?alt=media&token=0091bb64-9c3f-4835-9880-536a9077ffcf)
+
+이렇게 많은 파일들을 사용하고, 리액트는 아토믹 디자인이라고 해서, UI 엘리먼트를 작은 단위로 쪼개서 더 모듈화된 디자인 시스템을 만든다.
+
+이런 접근법은 컴포넌트 재사용성을 높여서, 새로운 컴포넌트를 만들 필요 없이 시간을 절약할 수 있다.
+
+번들링은 이렇게 쪼개진 여러 파일들을 하나로 묶는 과정을 말한다.
+
+---
+
+### 상황
+
+![Firebase Traffic](https://firebasestorage.googleapis.com/v0/b/kevlog-cdd91.appspot.com/o/2024-05%2Fcs_bundling2.png?alt=media&token=bba6767a-84e6-496a-ac00-758f9d1357bc)
+
+위 이미지처럼, 3.js 파일을 불러오려고 할 때의 상황을 생각해보자.
+
+3.js는 부모 노드인 1.js에 의존하고 있다. 따라서 3.js를 로드하려면 먼저 1.js를 로드해야 한다.
+
+각 노드를 로드하는 데 1초가 걸린다고 가정하면, 3.js를 로드하는 데 걸리는 시간은 다음과 같이 계산할 수 있다:
+
+- 1.js: 1초
+- 3.js: 1초
+- 총 2초
+
+하지만 번들링을 사용하지 않으면, 각 파일을 개별적으로 로드해야 하므로 네트워크 요청이 증가한다. 이는 전체 로딩 시간을 증가시키고, 성능에 부정적인 영향을 미칠 수 있다.
+
+이런 이유로 번들링을 사용한다.
+
+---
+
+### 번들링의 장점
+
+- 네트워크 요청 감소:
+  여러 파일을 하나로 묶으면 네트워크 요청 수를 줄일 수 있다. 이로 인해 `로딩 시간이 단축`되고, `서버 비용도 절감`할 수 있다.
+
+- 의존성 관리:
+  번들링은 의존성 관리에 도움을 준다. 하지만 의존성을 자동으로 처리해주는 것은 번들링 자체보다는 번들러 도구(예: 웹팩)의 기능이다.
+
+- 코드 최적화:
+  번들링 과정에서 코드를 압축하고 최적화할 수 있다. 이렇게 하면 `최종 파일 크기가 줄어`들어 `로딩 속도가 빨라`진다. 예를 들어, 트리 쉐이킹(Tree Shaking) 기법을 사용해 불필요한 코드를 제거할 수 있다.
+
+---
+
+### 번들링의 단점
+
+- 초기 설정의 복잡성:
+  번들러를 처음 설정할 때는 다소 복잡할 수 있다.
+
+(하지만 요즘은 대부분의 번들러가 패키지 하나에 필요한 설정을 포함하고 있어 쉽게 설정할 수 있다.)
+
+---
+
+### 레퍼런스
+
+1. https://www.youtube.com/watch?v=5zl1jJGCzVI
+
+2. https://velog.io/@ddhhss0603/%EB%B2%88%EB%93%A4%EB%A7%81-%EB%B2%88%EB%93%A4%EB%A7%81%EA%B3%BC-%EC%9B%B9%ED%8C%A9
