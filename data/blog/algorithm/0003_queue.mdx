@@ -1,0 +1,142 @@
+---
+title: '알고리즘 - 큐 (Queue)'
+date: '2024-05-29'
+tags: ['Algorithm']
+draft: false
+thumbnail: '/static/thumbnails/logo_ALGORITHM.png'
+summary: 자료구조 - 먼저 넣은 데이터가 먼저 나옴.
+---
+
+### 정의
+
+큐(Queue)는 자료구조 중 하나다.
+
+데이터를 저장하는 데 쓰이며, "먼저 넣은 데이터가 먼저 나오는" 방식으로 동작한다.
+
+이를 FIFO(First-In-First-Out)라고 부른다.
+
+즉, 가장 먼저 추가된 항목이 가장 먼저 제거된다.
+
+### 스택의 함수
+
+```
+  enqueue(item): 큐에 새로운 항목을 추가. 이 함수는 큐의 맨 뒤에 데이터를 삽입한다.
+
+  dequeue(): 큐에서 가장 먼저 추가된 항목을 제거. 큐가 비어있을 경우에는 제거할 항목이 없으므로 undefined를 반환하거나 에러를 발생.
+
+  front(): 큐의 맨 앞에 있는 항목을 반환. 큐에서 제거하지 않고 단순히 값을 확인하기 위한 용도로 사용. 큐가 비어있을 경우에는 undefined를 반환하거나 에러를 발생.
+
+  isEmpty(): 큐가 비어있는지 여부를 확인. 비어있으면 true를 반환하고, 아니면 false를 반환.
+
+  size(): 큐에 포함된 항목의 개수를 반환.
+
+  print(): 큐에 포함된 모든 항목을 순서대로 출력.
+```
+
+### 자바스크립트에서의 스택
+
+```js
+function createQueue() {
+  const queue = []
+
+  function enqueue(item) {
+    queue.push(item)
+  }
+
+  function dequeue() {
+    if (!isEmpty()) {
+      return queue.shift()
+    } else {
+      console.log('Queue is empty.')
+    }
+  }
+
+  function front() {
+    return !isEmpty() ? queue[0] : undefined
+  }
+
+  function isEmpty() {
+    return queue.length === 0
+  }
+
+  function size() {
+    return queue.length
+  }
+
+  function print() {
+    console.log(queue)
+  }
+
+  return {
+    enqueue,
+    dequeue,
+    front,
+    isEmpty,
+    size,
+    print,
+  }
+}
+
+// Usage
+const queue = createQueue()
+queue.enqueue(1)
+queue.enqueue(2)
+queue.enqueue(3)
+console.log(queue.front()) // Output: 1
+console.log(queue.size()) // Output: 3
+queue.dequeue()
+queue.print() // Output: [2, 3]
+```
+
+### 파이썬에서의 스택
+
+```
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.items.pop(0)
+        else:
+            print("Queue is empty.")
+
+    def front(self):
+        return self.items[0] if not self.is_empty() else None
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)
+
+    def print(self):
+        print(self.items)
+
+# Usage
+queue = Queue()
+queue.enqueue(1)
+queue.enqueue(2)
+queue.enqueue(3)
+print(queue.front()) # Output: 1
+print(queue.size())  # Output: 3
+queue.dequeue()
+queue.print() # Output: [2, 3]
+```
+
+### 사용처
+
+큐는 주로 데이터가 입력된 순서대로 처리되어야 할 때 유용하다.
+
+예를 들어, 은행의 대기열 시스템, 인쇄 작업 대기열, 또는 웹 서버의 요청 처리 등이 있다.
+
+이 외에도 게임의 이벤트 처리, 실시간 데이터 스트림 처리 등에도 사용될 수 있다.
+
+큐는 `순차적인 작업 처리`에 있어서 매우 유용한 자료구조다.
+
+그래서 정해진 시간에 정해진 작업들을 실행시키는 cron 작업들을,
+
+때로는 태스크 큐 (Task Queue) 라고도 부른다.
