@@ -1,0 +1,185 @@
+---
+title: '알고리즘 - 덱 (Deque)'
+date: '2024-05-28'
+tags: ['Algorithm']
+draft: false
+thumbnail: '/static/thumbnails/logo_ALGORITHM.png'
+summary: 자료구조 - 양쪽으로 넣고 뺼 수 있음.
+---
+
+### 정의
+
+덱(Deque, Double-Ended Queue)은 자료구조 중 하나다.
+
+데이터를 양쪽 끝에서 삽입하고 제거할 수 있는 구조를 가진다.
+
+즉, 큐와 달리 덱에서는 양쪽 끝에서 삽입과 삭제가 모두 가능하다.
+
+### 스택의 함수
+
+```
+  addFront(item): 덱의 앞쪽에 새로운 항목을 추가.
+
+  addRear(item): 덱의 뒤쪽에 새로운 항목을 추가.
+
+  removeFront(): 덱의 앞쪽에서 항목을 제거. 덱이 비어있을 경우에는 제거할 항목이 없으므로 undefined를 반환하거나 에러를 발생.
+
+  removeRear(): 덱의 뒤쪽에서 항목을 제거. 덱이 비어있을 경우에는 제거할 항목이 없으므로 undefined를 반환하거나 에러를 발생.
+
+  front(): 덱의 앞쪽에 있는 항목을 반환. 덱에서 제거하지 않고 단순히 값을 확인하기 위한 용도로 사용. 덱이 비어있을 경우에는 undefined를 반환하거나 에러를 발생.
+
+  rear(): 덱의 뒤쪽에 있는 항목을 반환. 덱에서 제거하지 않고 단순히 값을 확인하기 위한 용도로 사용. 덱이 비어있을 경우에는 undefined를 반환하거나 에러를 발생.
+
+  isEmpty(): 덱이 비어있는지 여부를 확인. 비어있으면 true를 반환하고, 아니면 false를 반환.
+
+  size(): 덱에 포함된 항목의 개수를 반환.
+
+  print(): 덱에 포함된 모든 항목을 순서대로 출력.
+```
+
+### 자바스크립트에서의 스택
+
+```js
+function createDeque() {
+  const deque = []
+
+  function addFront(item) {
+    deque.unshift(item)
+  }
+
+  function addRear(item) {
+    deque.push(item)
+  }
+
+  function removeFront() {
+    if (!isEmpty()) {
+      return deque.shift()
+    } else {
+      console.log('Deque is empty.')
+    }
+  }
+
+  function removeRear() {
+    if (!isEmpty()) {
+      return deque.pop()
+    } else {
+      console.log('Deque is empty.')
+    }
+  }
+
+  function front() {
+    return !isEmpty() ? deque[0] : undefined
+  }
+
+  function rear() {
+    return !isEmpty() ? deque[deque.length - 1] : undefined
+  }
+
+  function isEmpty() {
+    return deque.length === 0
+  }
+
+  function size() {
+    return deque.length
+  }
+
+  function print() {
+    console.log(deque)
+  }
+
+  return {
+    addFront,
+    addRear,
+    removeFront,
+    removeRear,
+    front,
+    rear,
+    isEmpty,
+    size,
+    print,
+  }
+}
+
+// Usage
+const deque = createDeque()
+deque.addRear(1)
+deque.addRear(2)
+deque.addFront(3)
+console.log(deque.front()) // Output: 3
+console.log(deque.rear()) // Output: 2
+console.log(deque.size()) // Output: 3
+deque.removeFront()
+deque.print() // Output: [1, 2]
+```
+
+### 파이썬에서의 스택
+
+```
+class Deque:
+    def __init__(self):
+        self.items = []
+
+    def add_front(self, item):
+        self.items.insert(0, item)
+
+    def add_rear(self, item):
+        self.items.append(item)
+
+    def remove_front(self):
+        if not self.is_empty():
+            return self.items.pop(0)
+        else:
+            print("Deque is empty.")
+
+    def remove_rear(self):
+        if not self.is_empty():
+            return self.items.pop()
+        else:
+            print("Deque is empty.")
+
+    def front(self):
+        return self.items[0] if not self.is_empty() else None
+
+    def rear(self):
+        return self.items[-1] if not self.is_empty() else None
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def size(self):
+        return len(self.items)
+
+    def print(self):
+        print(self.items)
+
+# Usage
+deque = Deque()
+deque.add_rear(1)
+deque.add_rear(2)
+deque.add_front(3)
+print(deque.front()) # Output: 3
+print(deque.rear())  # Output: 2
+print(deque.size())  # Output: 3
+deque.remove_front()
+deque.print() # Output: [1, 2]
+```
+
+### 사용처
+
+덱은 양쪽 끝에서 삽입과 제거가 자유롭게 가능하기 때문에 다양한 상황에서 유용하다.
+
+예를 들어, 앞뒤 양쪽에서 데이터를 처리해야 하는 경우, 예를 들어 양방향 버퍼 또는 브라우저 히스토리 관리에 유용하다.
+
+덱은 또한 슬라이딩 윈도우 알고리즘, 회문 검사, 그리고 양쪽 끝에서 데이터를 처리하는 기타 알고리즘에서 유용하게 사용될 수 있다.
+
+덱은 유연한 데이터 처리에 있어서 매우 유용한 자료구조다. 특히 데이터가 특정한 순서로 처리되어야 하지만 양쪽 끝에서의 삽입과 삭제가 필요할 때 유용하다.
+
+### 왜 덱이 아닌 스택과 큐를 사용?
+
+구현의 단순성: 스택과 큐는 각각의 동작에 맞게 간단하게 구현될 수 있다.
+
+효율성: 스택과 큐는 각각의 특화된 연산에 대해 최적의 성능을 제공.
+
+명확한 의도 전달: 스택과 큐를 사용하면 코드의 의도를 명확하게 표현.
+
+따라서, 프로그램에서 양쪽 끝에서의 삽입과 삭제가 모두 필요하지 않다면, 스택과 큐를 사용하는 것이 더 효율적이고 명확한 선택이다.
