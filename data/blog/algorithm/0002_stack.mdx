@@ -116,6 +116,9 @@ class Stack:
     def print(self):
         print(self.items)
 
+    def __str__(self):
+        return str(self.items)
+
 # Usage
 stack = Stack()
 stack.push(1)
