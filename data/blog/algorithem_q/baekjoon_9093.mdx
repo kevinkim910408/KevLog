@@ -1,0 +1,99 @@
+---
+title: '알고리즘 백준- 9093 단어 뒤집기'
+date: '2024-05-31'
+tags: ['Baekjoon']
+draft: false
+thumbnail: '/static/thumbnails/logo_ALGORITHM.png'
+summary:
+---
+
+### 9093 단어 뒤집기
+
+https://www.acmicpc.net/problem/9093
+
+#### - JS
+
+첫번째 시도 ✅: 생각해보니 스택을 안쓰고 편하게 해버렸다..
+
+```js
+var input = require('fs').readFileSync('/dev/stdin').toString().split('\n')
+
+function FlipWords(input) {
+  for (let i = 0; i <= input[0]; ++i) {
+    if (i === 0) continue
+    const arr = input[i].trim().split(' ')
+    if (arr.length > 0) {
+      const answer = arr.map((v) => v.split('').reverse().join('')).join(' ')
+      console.log(answer)
+    }
+  }
+}
+FlipWords(input)
+```
+
+반복문인 for loop만 input의 길이만큼 (n번) 반복되고 나머지는 그냥 상수 계산이지만, .map()도 반복문으로 치는게 맞는거 같아서,
+
+**시간 복잡도는 `O(n^2)` 라고 생각한다.**
+
+두번째 시도 ✅
+
+```js
+var input = require('fs').readFileSync('/dev/stdin').toString().split('\n')
+
+function FlipWords(input) {
+  for (let i = 0; i <= input[0]; i++) {
+    if (i === 0) continue
+    const words = input[i].trim().split(' ')
+    const reversedWords = words.map((word) => {
+      const temp = []
+      for (let char of word) {
+        temp.push(char)
+      }
+      let reversed = ''
+      while (temp.length > 0) {
+        reversed += temp.pop()
+      }
+      return reversed
+    })
+    console.log(reversedWords.join(' '))
+  }
+}
+
+FlipWords(input)
+```
+
+**시간 복잡도는 똑같이 `O(n^2)` 라고 생각한다.**
+
+#### - Python
+
+```py
+import sys
+
+n = int(sys.stdin.readline())
+
+def reverse_word(word):
+    stack = []
+    for char in word:
+        stack.append(char)
+    reverse = ""
+    while stack:
+        reverse += stack.pop()
+    return reverse
+
+for _ in range(n):
+    line = input().strip() # 문자열 공백제거
+    sentence = line.split()
+    reversed_words = [reverse_word(word) for word in sentence]  #  문장에서 단어를 뽑아 뒤집어서 리스트로 저장
+    reversed_line = ' '.join(reversed_words)  # 문자열로
+    print(reversed_line)
+```
+
+**시간 복잡도는 `O(n^2)` 이다.**
+
+### 자바스크립트 vs 파이썬
+
+| 메모리 | 시간 | 언어            | 코드 길이 |
+| :----- | :--- | :-------------- | :-------- |
+| 31120  | 632  | Python 3 / 수정 | 480       |
+| 17768  | 636  | node.js (스택)  | 548       |
+| 17608  | 640  | node.js (스택x) | 377       |
