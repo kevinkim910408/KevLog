@@ -1,0 +1,129 @@
+---
+title: '알고리즘 백준- 9012 괄호'
+date: '2024-06-27'
+tags: ['Baekjoon']
+draft: false
+thumbnail: '/static/thumbnails/logo_ALGORITHM.png'
+summary:
+---
+
+### 9012 스택
+
+https://www.acmicpc.net/problem/9012
+
+#### - JS
+
+첫번째 시도 ❌: 잔머리로 배열 두개 써서 length 비교를 해봤는데, ')(' 이런 경우는 NO를 해줘야 하는걸 풀고 나서 알았다..
+
+```js
+var input = require('fs').readFileSync('/dev/stdin').toString().split('\n')
+
+function Parenthesis(input) {
+  const LPStorage = []
+  const RPStorage = []
+  for (let i = 0; i < input.length; ++i) {
+    for (let j = 0; j < input[i].length; ++j) {
+      if (input[i][j] === '(') {
+        LPStorage.push(input[i][j])
+      } else if (input[i][j] === ')') {
+        RPStorage.push(input[i][j])
+      }
+    }
+    if (LPStorage.length !== RPStorage.length) {
+      console.log('NO')
+    } else {
+      console.log('YES')
+    }
+    LPStorage.length = 0
+    RPStorage.length = 0
+  }
+}
+
+Parenthesis(input)
+```
+
+두번째 시도 ✅:
+
+- 스택을 직접 만들지는 않고 그냥 push와 pop을 사용해서 사용했다
+- "(" 이게 들어오면 집어넣고, 아니면 pop을 해낸다. 만약 pop 할게없으면 NO, 길이가 0 이 아니어도 NO
+
+```js
+var input = require('fs').readFileSync('/dev/stdin').toString().split('\n')
+
+function Parenthesis(input) {
+  const caseLength = parseInt(input[0])
+
+  for (let i = 1; i <= caseLength; i++) {
+    const stack = []
+    let isValid = true
+
+    for (let j = 0; j < input[i].length; j++) {
+      if (input[i][j] === '(') {
+        stack.push(input[i][j])
+      } else {
+        if (stack.length === 0) {
+          isValid = false
+          break
+        } else {
+          stack.pop()
+        }
+      }
+    }
+
+    if (stack.length !== 0) isValid = false
+
+    if (isValid) console.log('YES')
+    else console.log('NO')
+  }
+}
+
+Parenthesis(input)
+```
+
+첫번쨰 for loop은 caseLength만큼 반복하고, 그 다음은 input의 for loop 이기 때문에
+
+**시간 복잡도는 `O(caseLength * n)` 이다.**
+
+#### - Python
+
+```py
+import sys
+input_data = sys.stdin.read().splitlines()
+
+def Parenthesis(input):
+    case_length = int(input[0])
+
+    for i in range(1, case_length + 1):
+        stack = []
+        is_valid = True
+
+        for char in input[i]:
+            if char == '(':
+                stack.append(char)
+            else:
+                if not stack:
+                    is_valid = False
+                    break
+                else:
+                    stack.pop()
+        if stack:
+            is_valid = False
+
+        if is_valid:
+            print("YES")
+        else:
+            print("NO")
+
+Parenthesis(input_data)
+```
+
+첫번쨰 for loop은 caseLength만큼 반복하고, 그 다음은 input의 for loop 이기 때문에
+
+**시간 복잡도는 `O(caseLength * n)` 이다.**
+
+### 자바스크립트 vs 파이썬
+
+| 메모리 | 시간 | 언어     | 코드 길이 |
+| :----- | :--- | :------- | :-------- |
+| 31120  | 40   | Python 3 | 630       |
+| 9528   | 140  | node.js  | 647       |
